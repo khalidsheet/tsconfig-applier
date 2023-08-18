@@ -2,6 +2,8 @@
 
 Welcome to `tsconfig-applier`! This Visual Studio Code extension simplifies the process of selecting and applying TypeScript configuration files (`tsconfig.json`) from the [tsconfig/bases](https://github.com/tsconfig/bases) repository. With this extension, you can effortlessly browse through available configuration files, select the one that suits your project, and apply it directly to your workspace.
 
+![Show Case](showcase-tsconfig-applier.gif)
+
 ## Features
 
 - Browse through the collection of TypeScript configuration files available in the [tsconfig/bases](https://github.com/tsconfig/bases) repository.
