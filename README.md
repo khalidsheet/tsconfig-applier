@@ -29,7 +29,8 @@ Contributions are welcome and encouraged! If you find any issues or have suggest
 
 ## License
 
-This extension is licensed under the [MIT License](LICENSE).
+This extension is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
 
 ---
 

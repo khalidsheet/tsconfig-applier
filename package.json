@@ -1,8 +1,9 @@
 {
   "name": "tsconfig-applier",
   "displayName": "tsconfig-applier",
-  "description": "",
-  "version": "0.0.1",
+  "description": "Welcome to `tsconfig-applier`! This Visual Studio Code extension simplifies the process of selecting and applying TypeScript configuration files (`tsconfig.json`) from the https://github.com/tsconfig/bases repository. With this extension, you can effortlessly browse through available configuration files, select the one that suits your project, and apply it directly to your workspace",
+  "icon": "icon.jpg",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.81.0"
   },
@@ -13,6 +14,10 @@
     "mindaro-dev.file-downloader"
   ],
   "activationEvents": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/khalidsheet/tsconfig-applier"
+  },
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
