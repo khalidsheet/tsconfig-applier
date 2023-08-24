@@ -1,10 +1,10 @@
-import { ExtensionContext, Uri, window, workspace } from "vscode";
+import { ExtensionContext, Uri, commands, window, workspace } from "vscode";
 import fetch from "node-fetch";
 import { FileDownloader, getApi } from "@microsoft/vscode-file-downloader-api";
 import { readFile, writeFile } from "fs";
 
 import { TOKEN_KEY } from "./constants";
-import { Octokit } from "octokit";
+import { Octokit, RequestError } from "octokit";
 import path = require("path");
 
 export const showBaseList = async (context: ExtensionContext) => {
@@ -60,19 +60,25 @@ const getBaseContent = async (context: ExtensionContext) => {
     },
   });
 
-  const response = await octokit.request(
-    "GET /repos/{owner}/{repo}/contents/{path}",
-    {
-      owner: "tsconfig",
-      repo: "bases",
-      path: "bases",
-      headers: {
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-    }
-  );
+  try {
+    const response = await octokit.request(
+      "GET /repos/{owner}/{repo}/contents/{path}",
+      {
+        owner: "tsconfig",
+        repo: "bases",
+        path: "bases",
+        headers: {
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      }
+    );
 
-  return response.data;
+    return response.data;
+  } catch (e: any) {
+    if (e.status === 401) {
+      askForToken(context);
+    }
+  }
 };
 
 const askForToken = async (context: ExtensionContext) => {
@@ -92,15 +98,26 @@ const askForToken = async (context: ExtensionContext) => {
   showBaseList(context);
 };
 
-export const checkUserTokenOrRun = (context: ExtensionContext) => {
+export const checkUserTokenOrRun = async (context: ExtensionContext) => {
   const { globalState } = context;
 
   const token = globalState.get(TOKEN_KEY);
 
   if (!token) {
-    window.showErrorMessage("Please provide a github token");
+    const response = await window.showErrorMessage(
+      "Please provide a personal github access token. Github access token used to request data from a public repository to help generate your tsconfig.json file and to keep everything up-tp-date.",
+      {},
+      "Generate access token"
+    );
+
+    if (response === "Generate access token") {
+      commands.executeCommand(
+        "vscode.open",
+        Uri.parse("https://github.com/settings/tokens")
+      );
+    }
+
     askForToken(context);
-    return;
   } else {
     showBaseList(context);
   }
